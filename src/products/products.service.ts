@@ -8,8 +8,8 @@ export class ProductsService {
 
     }
     products: Product[] = [];
-    async insertProduct(title: string, desc: string, price: number) {
-        const newProduct = new this.productModel({ title, description: desc, price });
+    async insertProduct(title: string) {
+        const newProduct = new this.productModel({ title});
         
         const result = await newProduct.save();
         return result.id as string;
@@ -17,29 +17,22 @@ export class ProductsService {
     }
     async getProducts() {
         const products = await this.productModel.find().exec();
-        return products.map((product) => ({ id: product.id, title: product.title, descripton: product.description, price: product.price }))
+        return products.map((product) => ({ id: product.id, title: product.title }))
 
     }
     async getSingleProduct(productId: string) {
 
         const product = await this.findProduct(productId);
-        return { id: product.id, title: product.title, description: product.description, price: product.price };
+        return { id: product.id, title: product.title };
     }
-    async updateProduct(productId: string, title: string, desc: string, price: number) {
+    async updateProduct(productId: string, title: string) {
 
         const updatedProduct = await this.findProduct(productId);
         if (title) {
             updatedProduct.title = title;
 
         }
-        if (desc) {
-            updatedProduct.description = desc;
-
-        }
-        if (price) {
-            updatedProduct.price = price;
-
-        }
+     
         updatedProduct.save();
     }
 
