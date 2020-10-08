@@ -6,8 +6,11 @@ import {
 import { TodoList } from './Todolist'
 import { CreateTodo } from './CreateTodo'
 import { EditTodo } from './Edittodo'
-import { DeleteTodo} from './DeleteTodo'
 
+// import RegisterLogin from "./RegisterLogin";
+import LoginPage from "./LoginPage";
+import RegisterPage from "./RegisterPage";
+// import {DeleteTodo} from './DeleteTodo'
 export default function RouterConfig() {
   return (
     <div>
@@ -17,7 +20,9 @@ export default function RouterConfig() {
       <Route exact path="/" component={TodoList}/>
       <Route path="/edit/:id" component={EditTodo}/>
       <Route path="/create" component={CreateTodo}/>
-      <Route path="/delete" component={DeleteTodo}/>
+      <Route path="/login" component={LoginPage}/>
+      <Route path="/signup" component={RegisterPage}/> 
+       {/* <Route path="/delete/:id" component={DeleteTodo}/>  */}
     </Switch>
     </div>
   )

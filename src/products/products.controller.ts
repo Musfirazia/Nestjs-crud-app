@@ -7,7 +7,7 @@ export class ProductsController {
 
     }
     @Post()
-    async addProduct(@Body('title') prodTitle: string)
+    async addProduct(@Body('text') prodTitle: string)
       {
         const generatedId = await this.productsService.insertProduct(prodTitle);
         return { id: generatedId };
@@ -20,13 +20,14 @@ export class ProductsController {
     @Get(':id')
     async getProduct(@Param('id') prodId: string) {
          const products=await this.productsService.getSingleProduct(prodId);
-         return products;
+         return {products:products};
     }
     @Patch(':id')
-    async updateProduct(@Param('id') prodId: string, @Body('title') prodTitle: string)
+    async updateProduct(@Param('id') prodId: string, @Body('text') prodTitle: string)
      {
-        await this.productsService.updateProduct(prodId, prodTitle);
-        return null;
+         console.log(prodTitle);
+        const updatedproduct=await this.productsService.updateProduct(prodId, prodTitle);
+        return {updatedproduct:updatedproduct};
     }
     @Delete(':id')
    async removeProduct(@Param('id') prodId: string) {

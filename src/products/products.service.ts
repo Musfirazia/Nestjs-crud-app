@@ -25,15 +25,16 @@ export class ProductsService {
         const product = await this.findProduct(productId);
         return { id: product.id, title: product.title };
     }
-    async updateProduct(productId: string, title: string) {
+    async updateProduct( prodId: string,title: string) {
 
-        const updatedProduct = await this.findProduct(productId);
+        const updatedProduct = await this.findProduct(prodId);
         if (title) {
             updatedProduct.title = title;
 
         }
-     
-        updatedProduct.save();
+        await updatedProduct.save();
+       
+        return updatedProduct;
     }
 
 

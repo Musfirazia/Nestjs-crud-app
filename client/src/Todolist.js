@@ -1,17 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom'
-import { getTodos } from "./api"
+import { getTodos, deleteTodo} from "./api"
+import { useHistory } from "react-router-dom";
 
 export const TodoList = () => {
   const [items, setItems] = useState([]);
+  //const match = useRouteMatch();
 
+  const history = useHistory();
   useEffect(() => {
     const fetchItems = async () => {
       const todos = await getTodos()
       setItems(todos);
+
     }
     fetchItems()
   }, [])
+ 
+  // const onclick= async (id) => {
+
+  //   await deleteTodo(id);
+
+  // }
 
   return (
     <div className="container">
@@ -22,23 +32,28 @@ export const TodoList = () => {
             <tr>
               <th>Text</th>
               <th>Action</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {
               items.map(todo => (
-                <tr key={todo._id}>
-                  <td>
-                    {todo._id}
+                <tr key={todo.id}>
+                  <td className="headings">
+                    {todo.title}
                   </td>
                   <td>
-                    <Link to={`/edit/${todo._id}`}>Edit</Link>
-                   
+                    <Link className="headings" to={`/edit/${todo.id}`}>Edit</Link>
+
                   </td>
                   <td>
-                    <Link to={`/delete/${todo._id}`}>Delete</Link>
-                  </td>
-                  
+                    <button className="btn btn-outline-primary" onClick={async () => { await deleteTodo(todo.id);    history.push("/"); await getTodos();  }}>Delete</button></td>
+                  {/* //             <Link to={`/delete/${todo.id}` onclick=()=>{{ onDelete = async () => {
+        // await deleteTodo(todo.id)
+        // }}>Delete</Link> */}
+
+
+
                 </tr>
               ))
             }

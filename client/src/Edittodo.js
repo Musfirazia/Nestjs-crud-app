@@ -11,13 +11,16 @@ export const EditTodo = () => {
   useEffect(() => {
     const fetchTodo = async () => {
       const todo = await getTodo(match.params.id)
+    
       setTodo(todo)
     }
     fetchTodo()
-  });
+  }, [match.params.id]);
 
   const onSubmit = async (data) => {
-    await updateTodo(data, match.params.id)
+    
+    await updateTodo(data, match.params.id);
+    console.log(match.params.id,data);
     history.push("/")
   }
 

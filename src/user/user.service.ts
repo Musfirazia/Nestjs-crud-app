@@ -20,12 +20,15 @@ export class UserService {
     async insertUser(name: string, email: string, password: string, lastname: string, role: number) {
     
         const bcrypt = require('bcrypt');
+        console.log('password -->',password)
         const hashedPassword = await bcrypt.hash(password, 10);
+        console.log("hashed password -->",hashedPassword)
         password = hashedPassword;
         const newProduct = new this.userModel({ name, email, password, lastname, role });
 
         const result = await newProduct.save();
-        return result.id as string;
+        return{success:true}
+        
 
     }
     async login(email: string, password: string) {
@@ -40,36 +43,41 @@ export class UserService {
                     message: "Auth failed, email not found"
                 }
             else {
-
+                console.log('password -->',password)
                 const isPasswordMatching = await bcrypt.compare(
-                    
                     password,
-                    user.password,
-        
+                    user.password, 
                 );
                 console.log(password,user.password)
-
+                
                 if (!isPasswordMatching) {
                     throw new HttpException('Wrong credentials provided', HttpStatus.BAD_REQUEST);
                 }
-    //             const payload = { email:email, sub:password };
-    //  const access_token= this.jwtService.sign(payload);
 
-                const token =  jwt.sign(user._id.toLocaleLowerCase(),jwtConstants)
+                    const userdata = {...user}
+                const token =  jwt.sign(userdata,jwtConstants.secret)
                 user.token = token;
+                console.log(token);
                 await user.save();
                 user.password = undefined;
-                return { loginSuccess:true,message:"Successfully login"};
+                
+                return {user:user, success:true};
                 
             }
 
         }
         catch (error) {
+            console.log(error)
             throw new HttpException('Wrong credentials provided', HttpStatus.BAD_REQUEST);
         }
   
     }
+    async logout(id:string){
+   
+       await  this.userModel.findOneAndUpdate({ _id: id }, { token: ""})
+          
 
+}
 }
 
 
